@@ -36,6 +36,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   file_picker: ^10.1.9
   iconsax_flutter:
+  path_provider:
 
 dependency_overrides:
   source_gen: 2.0.0

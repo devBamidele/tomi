@@ -11,7 +11,7 @@ part 'auth_session.g.dart';
 @JsonSerializable()
 class AuthSession {
   @HiveField(0)
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: 'access_token')
   final String? accessToken;
 
   @HiveField(1)

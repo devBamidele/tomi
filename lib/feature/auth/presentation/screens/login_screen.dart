@@ -11,6 +11,7 @@ import '../../../../config/router/app_router.dart';
 import '../../../../config/router/app_router.gr.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/colors.dart';
+import '../../data/dto/login_dto.dart';
 import '../providers/notifier.dart';
 import '../providers/state.dart';
 import '../widgets/header.dart';
@@ -57,10 +58,9 @@ class LoginScreen extends HookConsumerWidget {
     bool authLoading() => ref.watch(authNotifierProvider) is Loading;
 
     void login() {
-      Nav.push(context, HomeRoute());
-      // ref
-      //     .read(authNotifierProvider.notifier)
-      //     .login(LoginDto(email: email.text.trim(), password: password.text));
+      ref
+          .read(authNotifierProvider.notifier)
+          .login(LoginDto(email: email.text.trim(), password: password.text));
     }
 
     void validateLogin() {
@@ -82,7 +82,7 @@ class LoginScreen extends HookConsumerWidget {
       if (next is UnAuthenticated && isRoute) {
         showToast(next.message, context, isError: true);
       } else if (next is Authenticated) {
-        //    Nav.replaceAll(context, [AssessmentRoute()]);
+        Nav.replaceAll(context, [HomeRoute()]);
       }
     });
 

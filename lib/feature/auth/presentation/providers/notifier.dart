@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tomi/feature/auth/presentation/providers/state.dart';
 
+import '../../application/auth_manager.dart';
 import '../../data/dto/login_dto.dart';
 import '../../data/dto/sign_up_dto.dart';
 import '../../data/repository/repository.dart';
@@ -19,7 +20,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     result.fold((l) => state = AuthState.unauthenticated(l.message), (r) async {
       state = AuthState.authenticated();
-      //  await AuthManager.instance.saveAuthSession(r);
+
+      await AuthManager.instance.saveAuthSession(r);
     });
   }
 
@@ -31,7 +33,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     result.fold((l) => state = AuthState.unauthenticated(l.message), (r) async {
       state = AuthState.authenticated();
 
-      // await AuthManager.instance.saveAuthSession(r);
+      await AuthManager.instance.saveAuthSession(r);
     });
   }
 }

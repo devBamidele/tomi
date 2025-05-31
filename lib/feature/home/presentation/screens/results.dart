@@ -3,10 +3,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tomi/common/components/Box/box.dart';
+import 'package:tomi/feature/home/data/model/evaluation_result.dart';
 import 'package:tomi/feature/home/presentation/widgets/result_text.dart';
 
 class ResultsSheet extends HookWidget {
-  const ResultsSheet({super.key});
+  const ResultsSheet({super.key, required this.result});
+
+  final EvaluationResult result;
 
   @override
   Widget build(BuildContext context) {
@@ -100,15 +103,35 @@ class ResultsSheet extends HookWidget {
             Container(height: 1, color: Colors.grey[200]),
 
             addHeight(12),
-            ResultText(text: 'Relevance'),
-            ResultText(text: 'Readability'),
-            ResultText(text: 'Lexical Diversity'),
-            ResultText(text: 'Quality Score'),
-
+            ResultText(
+              label: 'Relevance',
+              value: result.relevanceScore.toStringAsFixed(2),
+            ),
+            ResultText(
+              label: 'Readability',
+              value: result.readabilityScore.toStringAsFixed(2),
+            ),
+            ResultText(
+              label: 'Lexical Diversity',
+              value: result.lexicalDiversityScore.toStringAsFixed(2),
+            ),
+            ResultText(
+              label: 'Quality Score',
+              value: result.overallQualityScore.toStringAsFixed(2),
+            ),
             addHeight(20),
           ],
         ),
       ),
     );
   }
+}
+
+void showResultsSheet(BuildContext context, EvaluationResult result) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => ResultsSheet(result: result),
+  );
 }

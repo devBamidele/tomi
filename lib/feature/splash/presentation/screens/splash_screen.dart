@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../../config/router/app_router.dart';
 import '../../../../config/router/app_router.gr.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../auth/application/auth_manager.dart';
 
 @RoutePage()
 class SplashScreen extends HookWidget {
@@ -31,24 +32,18 @@ class SplashScreen extends HookWidget {
 
     useEffect(() {
       controller.forward().then((_) async {
-        // final isLoggedIn = AuthManager.instance.isLoggedIn;
-        // final hasTakenAssessment = AuthManager.instance.hasTakenAssessment;
-        // final matches = AuthManager.instance.matches;
+        final isLoggedIn = AuthManager.instance.isLoggedIn;
 
         Future.delayed(const Duration(milliseconds: 500), () {
           if (!context.mounted) return;
 
           Nav.push(context, LoginRoute());
 
-          // if (isLoggedIn) {
-          //   if (hasTakenAssessment) {
-          //     Nav.replace(context, AssessmentResults(matches: matches));
-          //   } else {
-          //     Nav.replace(context, AssessmentRoute());
-          //   }
-          // } else {
-          //   Nav.replace(context, LoginRoute());
-          // }
+          if (isLoggedIn) {
+            Nav.replace(context, HomeRoute());
+          } else {
+            Nav.replace(context, LoginRoute());
+          }
         });
       });
 

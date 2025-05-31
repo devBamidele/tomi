@@ -17,31 +17,22 @@ class UserAdapter extends TypeAdapter<User> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return User(
-      id: fields[0] as String?,
+      id: fields[0] as int?,
       email: fields[1] as String?,
-      createdAt: fields[2] as DateTime?,
-      hasTakenQuestionnaire: fields[3] as bool?,
-      questionnaireAnswers: (fields[4] as List?)?.cast<String>(),
-      topMatches: (fields[5] as List?)?.cast<MatchResult>(),
+      name: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.email)
       ..writeByte(2)
-      ..write(obj.createdAt)
-      ..writeByte(3)
-      ..write(obj.hasTakenQuestionnaire)
-      ..writeByte(4)
-      ..write(obj.questionnaireAnswers)
-      ..writeByte(5)
-      ..write(obj.topMatches);
+      ..write(obj.name);
   }
 
   @override
@@ -60,28 +51,13 @@ class UserAdapter extends TypeAdapter<User> {
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-  id: json['id'] as String?,
+  id: (json['id'] as num?)?.toInt(),
   email: json['email'] as String?,
-  createdAt:
-      json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-  hasTakenQuestionnaire: json['hasTakenQuestionnaire'] as bool?,
-  questionnaireAnswers:
-      (json['questionnaireAnswers'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-  topMatches:
-      (json['topMatches'] as List<dynamic>?)
-          ?.map((e) => MatchResult.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  name: json['name'] as String?,
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'id': instance.id,
   'email': instance.email,
-  'createdAt': instance.createdAt?.toIso8601String(),
-  'hasTakenQuestionnaire': instance.hasTakenQuestionnaire,
-  'questionnaireAnswers': instance.questionnaireAnswers,
-  'topMatches': instance.topMatches,
+  'name': instance.name,
 };

@@ -48,7 +48,7 @@ class AuthSessionAdapter extends TypeAdapter<AuthSession> {
 // **************************************************************************
 
 AuthSession _$AuthSessionFromJson(Map<String, dynamic> json) => AuthSession(
-  accessToken: json['accessToken'] as String?,
+  accessToken: json['access_token'] as String?,
   user:
       json['user'] == null
           ? null
@@ -57,6 +57,6 @@ AuthSession _$AuthSessionFromJson(Map<String, dynamic> json) => AuthSession(
 
 Map<String, dynamic> _$AuthSessionToJson(AuthSession instance) =>
     <String, dynamic>{
-      'accessToken': instance.accessToken,
+      'access_token': instance.accessToken,
       'user': instance.user,
     };

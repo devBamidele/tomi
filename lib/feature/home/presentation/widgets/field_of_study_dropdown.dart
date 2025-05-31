@@ -14,7 +14,13 @@ class FieldOfStudyDropdown extends HookWidget {
   const FieldOfStudyDropdown({
     this.selectedValue,
     required this.onChanged,
-    this.items = const ['Science', 'Finance', 'Engineering', 'Others'],
+    this.items = const [
+      'Science',
+      'Medicine',
+      'Finance',
+      'Engineering',
+      'Others',
+    ],
     super.key,
   });
 
@@ -31,7 +37,7 @@ class FieldOfStudyDropdown extends HookWidget {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.black.withOpacity(0.55),
+                  color: AppColors.black.withValues(alpha: .55),
                   width: 1,
                 ),
               ),

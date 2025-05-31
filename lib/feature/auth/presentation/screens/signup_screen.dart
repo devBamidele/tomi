@@ -7,6 +7,7 @@ import 'package:tomi/feature/auth/presentation/extras.dart';
 
 import '../../../../common/components/components.dart';
 import '../../../../common/style/component_style.dart';
+import '../../../../config/router/app_router.dart';
 import '../../../../config/router/app_router.gr.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/colors.dart';
@@ -27,18 +28,22 @@ class SignupScreen extends HookConsumerWidget {
     final validationStates = useState<List<bool>>(List.filled(4, false));
     final theme = Theme.of(context);
 
+    final nameFocusNode = useFocusNode();
     final emailFocusNode = useFocusNode();
     final pwdFocusNode = useFocusNode();
     final cfmPwdFocusNode = useFocusNode();
 
+    final name = useTextEditingController();
     final email = useTextEditingController();
     final password = useTextEditingController();
     final cfmPassword = useTextEditingController();
 
+    final nameFormKey = useState(GlobalKey<FormState>());
     final emailFormKey = useState(GlobalKey<FormState>());
     final pwdFormKey = useState(GlobalKey<FormState>());
     final cfmPwdFormKey = useState(GlobalKey<FormState>());
 
+    final nameShakeState = useState(GlobalKey<ShakeState>());
     final emailShakeState = useState(GlobalKey<ShakeState>());
     final cfmPwdShakeState = useState(GlobalKey<ShakeState>());
 
@@ -100,19 +105,27 @@ class SignupScreen extends HookConsumerWidget {
     void signUp() {
       ref
           .read(authNotifierProvider.notifier)
-          .signup(SignUpDto(email: email.text.trim(), password: password.text));
+          .signup(
+            SignUpDto(
+              email: email.text.trim(),
+              name: name.text.trim(), // 👈 new
+              password: password.text,
+            ),
+          );
     }
 
     void validateSignUp() {
+      bool nameValid = nameFormKey.value.currentState?.validate() ?? false;
       bool emailValid = emailFormKey.value.currentState?.validate() ?? false;
       bool pwdValid = password.text.validatePassword();
       bool cfmPwdValid = cfmPwdFormKey.value.currentState?.validate() ?? false;
 
-      if (emailValid && pwdValid && cfmPwdValid) {
+      if (nameValid && emailValid && pwdValid && cfmPwdValid) {
         signUp();
         return;
       }
 
+      if (!nameValid) nameShakeState.value.currentState?.shake();
       if (!emailValid) emailShakeState.value.currentState?.shake();
       if (!cfmPwdValid) cfmPwdShakeState.value.currentState?.shake();
     }
@@ -123,7 +136,7 @@ class SignupScreen extends HookConsumerWidget {
       if (next is UnAuthenticated && isRoute) {
         showToast(next.message, context, isError: true);
       } else if (next is Authenticated) {
-        // Nav.replaceAll(context, [AssessmentRoute()]);
+        Nav.replaceAll(context, [HomeRoute()]);
       }
     });
 
@@ -155,6 +168,21 @@ class SignupScreen extends HookConsumerWidget {
                     title: AppStrings.signUpTitle,
                     subtitle: AppStrings.signUpSubtitle,
                   ),
+                  textFieldTitle('Full Name', theme),
+                  Form(
+                    key: nameFormKey.value,
+                    child: Shake(
+                      key: nameShakeState.value,
+                      child: AppTextField(
+                        enabled: !authLoading(),
+                        focusNode: nameFocusNode,
+                        textController: name,
+                        hintText: 'Enter your full name',
+                        validation: (name) => name.validateString('Full name'),
+                      ),
+                    ),
+                  ),
+                  addHeight(20),
                   textFieldTitle(AppStrings.emailLabel, theme),
                   Form(
                     key: emailFormKey.value,
